@@ -261,7 +261,7 @@ $(document).ready(function(){
         }
       }
     });
-    input.append(form);
+    input.empty().append(form);
   });
 });
 

@@ -25,7 +25,7 @@ ci|Strokes:before {
   content: "#strokes";
 }
 ci|Strokes:after {
-  content: " strokes(s)";
+  content: " strokes";
 }
 ci|Readings:before {
   float: none;

@@ -18,12 +18,14 @@
 #input input {
   font-size: 1.2em;
 }
-#detail {
+#rightpanel {
   z-index: 1;
   position: fixed;
   top: 0;
   right: 0;
-  width: 30%;
+  width: 40%;
+  height: 100%;
+  overflow: auto;
 }
 #detail_glyph {
   font-size: 600%;
@@ -32,7 +34,7 @@
   z-index: 0;
   position: relative;
   top: 1em;
-  width: 70%;
+  width: 60%;
   font-size: 300%;
   font-family: serif;
 }
@@ -45,12 +47,21 @@
 #output > .exglyph_mj_ivs {
   background-color: #cff;
 }
+#license {
+  margin: 1em;
+}
 /*]]>*/</style>
 </head>
 <body>
-<div id="input"></div>
-<div id="detail"></div>
+<div id="input">loading...</div>
 <div id="output"></div>
+<div id="rightpanel">
+<div id="license">
+<div><a href="http://creativecommons.org/licenses/by-sa/2.1/jp/">CC BY-SA 2.1 JP</a></div>
+<div>original data: <a href="http://ossipedia.ipa.go.jp/ipamjfont/">ipamjfont</a></div>
+</div>
+<div id="detail"></div>
+</div>
 </body>
 </html>
 
