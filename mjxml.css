@@ -1,0 +1,76 @@
+@charset "utf-8";
+@namespace "http://www.w3.org/1999/xhtml";
+@namespace ci "urn:uuid:c3a9c250-111d-11e1-b2ae-5f5c502ee262";
+ci|* {
+  display: block;
+}
+ci|Character > ci|*:before {
+  display: block;
+  float: left;
+  width: 8em;
+}
+ci|SVGVersion:before {
+  content: "SVG Version";
+}
+ci|HanyoDenshi:before {
+  content: "Hanyo Denshi";
+}
+ci|HeiseiMincho:before {
+  content: "Heisei Mincho";
+}
+ci|History:before {
+  content: "History:";
+}
+ci|Strokes:before {
+  content: "#strokes";
+}
+ci|Strokes:after {
+  content: " strokes(s)";
+}
+ci|Readings:before {
+  float: none;
+  content: "Readings:";
+}
+ci|Reading {
+  display: list-item;
+  list-style-type: disc;
+  margin-left: 1.5em;
+}
+ci|Reading:before {
+  float: none;
+  display: marker;
+}
+ci|Measure {
+  display: list-item;
+  list-style-type: circle;
+  margin-left: 1em;
+}
+ci|Measure:before {
+  float: none;
+  display: marker;
+}
+ci|Koseki:before {
+  content: "Koseki";
+}
+ci|Juki:before {
+  content: "Juki";
+}
+ci|Toki:before {
+  content: "Toki";
+}
+ci|X0213:before {
+  content: "JIS X 0213";
+}
+ci|X0212:before {
+  content: "JIS X 0212";
+}
+ci|UCS:before {
+  content: "UCS";
+}
+ci|IVS:before {
+  content: "IVS";
+}
+ci|Daikanwa:before {
+  content: "Dai Kanwa Jiten";
+}
+
