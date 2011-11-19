@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>mjview</title>
+<script src="./jquery-1.7.min.js"></script>
+<script src="./mjview.js"></script>
+<link rel="stylesheet" href="exglyph.css" type="text/css">
+<style><!--
+#input {
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+#input input {
+  font-size: 1.2em;
+}
+#detail {
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 30%;
+}
+#detail > .exglyph_mj {
+  font-size: 600%;
+}
+#output {
+  z-index: 0;
+  position: relative;
+  top: 1em;
+  width: 70%;
+  font-size: 300%;
+  font-family: serif;
+}
+#output > .exglyph_mj_no_ucs {
+  background-color: #fcc;
+}
+#output > .exglyph_mj_ucs_not_imp {
+  background-color: #ff9;
+}
+#output > .exglyph_mj_ivs {
+  background-color: #cff;
+}
+--></style>
+</head>
+<body>
+<div id="input"></div>
+<div id="detail"></div>
+<div id="output"></div>
+</body>
+</html>
+

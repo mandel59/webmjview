@@ -1,0 +1,23 @@
+@charset "utf-8";
+@font-face {
+  font-family: "MJMincho";
+  src: local("IPAmj明朝"), local("IPAmjMincho");
+}
+
+.exglyph {
+  display: inline-block;
+  overflow: hidden;
+  font-size: 100%;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+  background-repeat: no-repeat;
+  -webkit-background-size: contain;
+     -moz-background-size: contain;
+       -o-background-size: contain;
+  background-size: contain;
+}
+.exglyph_mj {
+  font-family: "MJMincho", serif;
+}
+
