@@ -17,16 +17,17 @@ function MJURIList(mj){
   /*  browser can't show the svg file because the server returns it as text/xml */
 }
 
-function IsMJFontInstalled() {
-  return true;
+function KangXiRadical(radical) {
+  return String.fromCharCode(0x2F00 + radical - 1);
 }
+
 function IsIVSSupported() {
   if($.browser) {
-    if($.browser.mozilla && parseFloat($.browser.version.match(/[0-9]+(\.[0-9]+)?/)) > 3.9 )
+    if($.browser.mozilla && parseFloat($.browser.version.match(/\d+(\.\d+)?/)) > 3.9 )
       return true;
     if($.browser.opera && navigator.userAgent.indexOf("Win") != -1)
       return true;
-    if($.browser.msie && parseInt($.browser.version.match(/[0-9]+/)) > 9 )
+    if($.browser.msie && parseInt($.browser.version.match(/\d+/)) > 9 )
       return true;
   }
   return false;
@@ -69,31 +70,54 @@ function ParseQuery(val){
   var qs = val.replace("\u3000", " ").split(" ");
   var query = [];
   for(var i = 0; i < qs.length; i++){
-    var q = qs[i];
+    var q = qs[i].toUpperCase();
+    if(q === "") continue;
     if(IsKana(q)){
       query.push(["Read", q]);
       continue;
     }
-    if(q.substring(0,2).toUpperCase() == "MJ") {
+    if(q.substring(0,2) == "MJ") {
       query.push(["MJ", "MJ" + zeronum(parseInt(q.substring(2)), 6)]);
       continue;
     }
-    switch(q.charAt(0)) {
-      case '<':
-      case '=':
-      case '>':
+    var q0 = q.charAt(0);
+    switch(q0) {
+      case '[':
+        q.match(/^\[(\d+)\]-?(\d+)?-?(\d+)?$/);
+        var radical = RegExp.$1;
+        var minstroke = RegExp.$2;
+        var maxstroke = RegExp.$3;
+        if(radical) {
+          var indxq = ["Indx", radical];
+          if(minstroke) {
+            indxq.push(minstroke);
+            if(maxstroke) indxq.push(maxstroke);
+          }
+          query.push(indxq);
+        }
+        continue;
+      case '<': case '=': case '>':
         var v = q.substring(1).split("-");
-        if(v.length > 1) {
-          query.push(["Strk", v[0], v[1]]);
+        if(v.length == 2) {
+          query.push(["Strk", parseInt(v[0]), parseInt(v[1])]);
         } else query.push(["Strk", q]);
         continue;
+      case 'U':
+        q.match(/^U\+?([0-9A-F]{4,5})$/);
+        if(RegExp.$1) {
+          var ucs = parseInt(RegExp.$1, 16);
+          query.push(["UCS", ucs]);
+        }
+        continue;
     }
+    if(q0.charCodeAt(0) >= 0xD840) query.push(["Str", q.substring(0,2)]);
+    else if(q0.charCodeAt(0) >= 0x3400) query.push(["Str", q0]);
   }
   return query;
 }
 
 function XPathQuery(arr, nodes){
-  if(!nodes) nodes = "//ci:CharInfo/ci:Character";
+  if(!nodes) nodes = "/ci:CharInfo/ci:Character";
   var str = "";
   for(var i = 0; i < arr.length; i++){
     switch(arr[i][0]) {
@@ -114,13 +138,20 @@ function XPathQuery(arr, nodes){
                + " and @ci:strokes>=" + arr[i][2]
                + " and @ci:strokes<=" + arr[i][3] + "]]";
         } else if(arr[i][2]) {
-          str += "[ci:Indices/ci:Index[@ci:radical=" + arr[i][1] + " and @ci:strokes" + arr[i][2] + "]]";
+          str += "[ci:Indices/ci:Index[@ci:radical=" + arr[i][1] + " and @ci:strokes=" + arr[i][2] + "]]";
         } else {
           str += "[ci:Indices/ci:Index/@ci:radical=" + arr[i][1] + "]";
         }
         break;
       case "Read":
         str += "[ci:Readings/ci:Reading/text()=\"" + arr[i][1] + "\"]";
+        break;
+      case "UCS":
+        str += "[ci:UCS/@ci:ucs=" + arr[i][1] + "]";
+        break;
+      case "Str":
+        str += "[contains(ci:UCS/text(), \"" + arr[i][1]
+             + "\") or contains(ci:IVS/text(), \"" + arr[i][1] + "\")]";
         break;
     }
   }
@@ -135,31 +166,56 @@ function nsResolver(prefix) {
   return ns[prefix] || null;
 }
 
-function showGlyphs(result, output, bind) {
-  var mj_font_installed = IsMJFontInstalled();
+function getMJGlyph(chr) {
+  var mj_font_installed = $.fontAvailable("MJMincho");
   var ivs_supported = IsIVSSupported();
+  var mj = chr.getElementsByTagNameNS(CharInfoNS, "MJGlyphName")[0].firstChild.nodeValue;
+  var ucs = chr.getElementsByTagNameNS(CharInfoNS, "UCS");
+  var ivs = chr.getElementsByTagNameNS(CharInfoNS, "IVS");
+  var img = ExGlyph().addClass("exglyph_mj").attr("title", mj);
+  if(ivs[0]){
+    if(!mj_font_installed || !ivs_supported) ExGlyph(MJURIList(mj), img);
+    img.text(ivs[0].firstChild.nodeValue).addClass("exglyph_mj_ivs");
+  } else if(ucs[0]){
+    if(ucs[0].getAttributeNS(CharInfoNS, "imp") == "0"){
+      ExGlyph(MJURIList(mj), img).addClass("exglyph_mj_ucs_not_imp");
+    } else if(!mj_font_installed) {
+      ExGlyph(MJURIList(mj), img);
+    }
+    img.text(ucs[0].firstChild.nodeValue);
+  } else {
+    ExGlyph(MJURIList(mj), img).addClass("exglyph_mj_no_ucs").text("\uFFFD");
+  }
+  return img;
+}
+
+function showMJInfo(xml, glyph, output) {
+  if(!output) output = $("<div/>");
+  var mj = glyph.attr("title");
+  var xpath = XPathQuery([["MJ", mj]]);
+  var chr = xml.evaluate(xpath, xml, nsResolver, XPathResult.ANY_TYPE, null).iterateNext();
+  $("<div/>").append(glyph.clone()).attr("id", "detail_glyph").appendTo(output);
+  var infolist = $("<dl/>");
+  var info = $(chr).clone();
+  var indices = xml.evaluate(xpath+"//ci:Index", xml, nsResolver, XPathResult.ANY_TYPE, null);
+  var index;
+  while(index = indices.iterateNext()) {
+    var radical = parseInt(index.getAttributeNS(CharInfoNS, "radical"));
+    var strokes = parseInt(index.getAttributeNS(CharInfoNS, "strokes"));
+    var txt = KangXiRadical(radical) + "[" + radical + "]-" + strokes;
+    $("<div/>").addClass("kangxi_index").text(txt).appendTo(output);
+  }
+  info.appendTo(output);
+  return output;
+}
+
+function showGlyphs(result, output, bind) {
   if(!output) output = $("<div/>");
   var MAX = 50;
   var itr;
   var i = 0;
   while((i<MAX) && (itr = result.iterateNext())) {
-    var mj = itr.getElementsByTagNameNS(CharInfoNS, "MJGlyphName")[0].firstChild.nodeValue;
-    var img = ExGlyph().addClass("exglyph_mj").attr("title", mj);
-    var ucs = itr.getElementsByTagNameNS(CharInfoNS, "UCS");
-    var ivs = itr.getElementsByTagNameNS(CharInfoNS, "IVS");
-    if(ivs[0]){
-      if(!mj_font_installed || !ivs_supported) ExGlyph(MJURIList(mj), img);
-      img.text(ivs[0].firstChild.nodeValue).addClass("exglyph_mj_ivs");
-    } else if(ucs[0]){
-      if(ucs[0].getAttributeNS(CharInfoNS, "imp") == "0"){
-        ExGlyph(MJURIList(mj), img).addClass("exglyph_mj_ucs_not_imp");
-      } else if(!mj_font_installed) {
-        ExGlyph(MJURIList(mj), img);
-      }
-      img.text(ucs[0].firstChild.nodeValue);
-    } else {
-      ExGlyph(MJURIList(mj), img).addClass("exglyph_mj_no_ucs").text("\uFFFD");
-    }
+    var img = getMJGlyph(itr);
     if(!!bind) img.bind(bind);
     output.append(img);
     i++;
@@ -178,26 +234,32 @@ $(document).ready(function(){
   var detail = $("#detail");
   var xhr = $.ajax("data/mjcharinfo.xml").done(function(xml){
     var inputbox = $("<input type='text'/>");
-    var submit = "<input type='submit' value='Search'/>"
-    var form = $("<form/>").append(inputbox).append(submit).submit(function(){
+    var button = $("<input type='submit' value='Search'/>");
+    var form = $("<form/>").append(inputbox).append(button).submit(function(){return false;});
+    form.submit(function(){
       if(output.showGlyphsTimerID) {
         clearTimeout(output.showGlyphsTimerID);
         output.showGlyphsTimerID = null;
-        return false;
+        return;
       }
       var val = inputbox.val();
       var query = ParseQuery(val);
       if(query.length > 0) {
         var xpath = XPathQuery(query);
+        if(!xml.evaluate) {
+          output.empty().append("<p>error: xml evaluate not found</p>");
+          return;
+        }
         var result = xml.evaluate(xpath, xml, nsResolver, XPathResult.ANY_TYPE, null);
-        output.empty();
-        showGlyphs(result, output, {
-          "click": function(){
-            detail.empty().append($(this).clone());
-          },
-        });
+        if(result) {
+          output.empty();
+          showGlyphs(result, output, {
+            "click": function(){
+              detail.empty().append(showMJInfo(xml, $(this)));
+            },
+          });
+        }
       }
-      return false;
     });
     input.append(form);
   });

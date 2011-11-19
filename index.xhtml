@@ -1,12 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html>
-<html lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
-<meta charset="UTF-8">
 <title>mjview</title>
-<script src="./jquery-1.7.min.js"></script>
-<script src="./mjview.js"></script>
-<link rel="stylesheet" href="exglyph.css" type="text/css">
-<style><!--
+<script src="./lib/jquery-1.7.min.js" type="application/javascript"></script>
+<script src="./lib/jquery.fontavailable-1.1.js" type="application/javascript"></script>
+<script src="./mjview.js" type="application/javascript" charset="UTF-8"></script>
+<link rel="stylesheet" href="exglyph.css" type="text/css"/>
+<link rel="stylesheet" href="mjxml.css" type="text/css"/>
+<style>/*<![CDATA[*/
 #input {
   z-index: 1;
   position: fixed;
@@ -23,7 +25,7 @@
   right: 0;
   width: 30%;
 }
-#detail > .exglyph_mj {
+#detail_glyph {
   font-size: 600%;
 }
 #output {
@@ -43,7 +45,7 @@
 #output > .exglyph_mj_ivs {
   background-color: #cff;
 }
---></style>
+/*]]>*/</style>
 </head>
 <body>
 <div id="input"></div>
