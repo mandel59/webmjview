@@ -77,7 +77,7 @@ function ParseQuery(val){
       continue;
     }
     if(q.substring(0,2) == "MJ") {
-      query.push(["MJ", "MJ" + zeronum(parseInt(q.substring(2)), 6)]);
+      query.push(["MJ", "MJ" + zeronum(parseInt(q.substring(2), 10), 6)]);
       continue;
     }
     var q0 = q.charAt(0);
