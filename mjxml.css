@@ -43,7 +43,7 @@ ci|Reading:before {
 ci|Measure {
   display: list-item;
   list-style-type: circle;
-  margin-left: 1em;
+  margin-left: 1.5em;
 }
 ci|Measure:before {
   float: none;

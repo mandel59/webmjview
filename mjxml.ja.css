@@ -1,0 +1,38 @@
+@charset "utf-8";
+@namespace "http://www.w3.org/1999/xhtml";
+@namespace ci "urn:uuid:c3a9c250-111d-11e1-b2ae-5f5c502ee262";
+:lang(ja) ci|SVGVersion:before {
+  content: "SVGバージョン";
+}
+:lang(ja) ci|HanyoDenshi:before {
+  content: "汎用電子";
+}
+:lang(ja) ci|HeiseiMincho:before {
+  content: "平成明朝";
+}
+:lang(ja) ci|History:before {
+  content: "履歴";
+}
+:lang(ja) ci|Strokes:before {
+  content: "総画数";
+}
+:lang(ja) ci|Strokes:after {
+  content: "画";
+}
+:lang(ja) ci|Readings:before {
+  float: none;
+  content: "読み:";
+}
+:lang(ja) ci|Koseki:before {
+  content: "戸籍統一";
+}
+:lang(ja) ci|Juki:before {
+  content: "住基ネット統一";
+}
+:lang(ja) ci|Toki:before {
+  content: "登記統一";
+}
+:lang(ja) ci|Daikanwa:before {
+  content: "大漢和辞典";
+}
+

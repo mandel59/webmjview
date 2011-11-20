@@ -8,10 +8,11 @@
 <script src="./mjview.js" type="application/javascript" charset="UTF-8"></script>
 <link rel="stylesheet" href="exglyph.css" type="text/css"/>
 <link rel="stylesheet" href="mjxml.css" type="text/css"/>
+<link rel="stylesheet" href="mjxml.ja.css" type="text/css"/>
 <style>/*<![CDATA[*/
 #input {
   z-index: 1;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
 }
@@ -20,45 +21,62 @@
 }
 #rightpanel {
   z-index: 1;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
-  width: 40%;
+  width: 30%;
   height: 100%;
+  max-height: 100%;
   overflow: auto;
 }
 #detail_glyph {
   font-size: 600%;
+  line-height: 1em;
 }
 #output {
   z-index: 0;
-  position: relative;
-  top: 1em;
-  width: 60%;
+  position: absolute;
+  top: 10%;
   font-size: 300%;
   font-family: serif;
+  width: 65%;
+  height: 90%;
+  max-height: 90%;
+  overflow: auto;
 }
 #output > .exglyph_mj_no_ucs {
-  background-color: #fcc;
+  background-color: rgba(255,0,0,0.2);
 }
 #output > .exglyph_mj_ucs_not_imp {
-  background-color: #ff9;
+  background-color: rgba(64,64,64,0.2);
 }
 #output > .exglyph_mj_ivs {
-  background-color: #cff;
+  background-color: rgba(0,128,255,0.2);
 }
 #license {
   margin: 1em;
 }
+.links {
+  margin: 0.5em;
+  list-style: none;
+}
+.links li {
+  display: inline-block;
+  margin: 0 0.5em;
+}
 /*]]>*/</style>
 </head>
 <body>
-<div id="input">loading...</div>
+<div id="input"></div>
 <div id="output"></div>
 <div id="rightpanel">
+<div>
 <div id="license">
-<div><a href="http://creativecommons.org/licenses/by-sa/2.1/jp/">CC BY-SA 2.1 JP</a></div>
-<div>original data: <a href="http://ossipedia.ipa.go.jp/ipamjfont/">ipamjfont</a></div>
+<div><a target="_blank" href="http://creativecommons.org/licenses/by-sa/2.1/jp/">表示 - 継承 2.1 日本 (CC BY-SA 2.1)</a></div>
+<div>出典: <a target="_blank" href="http://ossipedia.ipa.go.jp/ipamjfont/">文字情報基盤 文字情報一覧表</a></div>
+<p><a target="_blank" href="readme.xhtml">使用方法</a></p>
+<div id="message"/>
+</div>
 </div>
 <div id="detail"></div>
 </div>
