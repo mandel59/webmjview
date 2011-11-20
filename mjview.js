@@ -321,7 +321,6 @@ $(document).ready(function(){
         button.attr("value", _("Search"));
         return;
       }
-      button.attr("value", _("Stop"));
       var val = inputbox.val();
       var query = ParseQuery(val);
       if(query.length > 0) {
@@ -333,6 +332,7 @@ $(document).ready(function(){
         var result = xml.evaluate(xpath, xml, nsResolver, XPathResult.ANY_TYPE, null);
         if(result) {
           output.empty();
+          button.attr("value", _("Stop"));
           showGlyphs(result, output, {
             "click": function(){
               detail.empty().append(showMJInfo(xml, $(this)));
