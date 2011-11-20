@@ -280,7 +280,7 @@ function showGlyphs(result, output, bind, stop) {
     i++;
   }
   if(i == MAX) {
-    output.showGlyphsTimerID = setTimeout(function(){showGlyphs(result, output, bind);}, 10);
+    output.showGlyphsTimerID = setTimeout(function(){showGlyphs(result, output, bind, stop);}, 10);
   } else {
     output.showGlyphsTimerID = null;
     if(typeof(stop) === 'function') stop();
