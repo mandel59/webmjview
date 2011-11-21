@@ -1,0 +1,26 @@
+CACHE MANIFEST
+# v0.0
+CACHE:
+data/mjcharinfo.xml
+data/mjcharinfo.1.xml
+data/mjcharinfo.2.xml
+data/mjcharinfo.3.xml
+data/mjcharinfo.4.xml
+data/mjcharinfo.5.xml
+data/mjcharinfo.6.xml
+data/mjcharinfo.7.xml
+data/mjcharinfo.8.xml
+data/mjcharinfo.9.xml
+data/mjcharinfo.10.xml
+data/mjcharinfo.11.xml
+data/mjcharinfo.12.xml
+lib/jquery.fontavailable-1.1.js
+lib/jquery-1.7.min.js
+exglyph.css
+mjxml.css
+mjxml.ja.css
+mjview.js
+index.xhtml
+readme.xhtml
+NETWORK:
+*
