@@ -163,7 +163,7 @@ function ParseQuery(val){
 }
 
 function XPathQuery(arr, nodes){
-  if(!nodes) nodes = "/ci:CharInfo/ci:Character";
+  if(!nodes) nodes = "/ci:CharInfoSet/ci:CharInfo/ci:Character";
   var str = "";
   for(var i = 0; i < arr.length; i++){
     switch(arr[i][0]) {
@@ -307,7 +307,7 @@ $(document).ready(function(){
   var output = $("#output");
   var detail = $("#detail");
   input.append(_("<p>now loading...</p>"));
-  var xhr = $.ajax("data/mjcharinfo.xml").done(function(xml){
+  function mjview_init(xml){
     if( !$.fontAvailable("MJMincho") ) {
       $("#message").append(_("<p><a href='http://ossipedia.ipa.go.jp/ipamjfont/download.html'>IPAmj明朝</a>のインストールを推奨します。</p>"));
     }
@@ -342,6 +342,21 @@ $(document).ready(function(){
       }
     });
     input.empty().append(form);
-  });
+  }
+  var xmldocs = [];
+  var num_xmls = 12
+  for(var i = 0; i < num_xmls; i++) {
+    $.ajax("data/mjcharinfo."+(i+1)+".xml").done(function(xmldoc){
+      xmldocs.push(xmldoc);
+      if(xmldocs.length < num_xmls) return;
+      $.ajax("data/mjcharinfo.xml").done(function(xmlsetdoc){
+        for(var i = 0; i < num_xmls; i++) {
+          var node = xmlsetdoc.adoptNode(xmldocs[i].documentElement);
+          xmlsetdoc.documentElement.appendChild(node);
+        }
+        mjview_init(xmlsetdoc);
+      });
+    });
+  }
 });
 

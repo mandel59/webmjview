@@ -7,7 +7,6 @@ use Encode;
 my $shiftjis = find_encoding('Shift_JIS');
 my $utf8 = find_encoding('UTF-8');
 
-<STDIN>;
 my $xml_header = << "XML_HEADER";
 <?xml version="1.0" encoding="UTF-8"?>
 <ci:CharInfo xmlns:ci="urn:uuid:c3a9c250-111d-11e1-b2ae-5f5c502ee262">
