@@ -88,6 +88,10 @@ function ParseQuery(val){
       query.push(["Read", q]);
       continue;
     }
+    if(q == "NOUCS") {
+      query.push(["NOUCS"]);
+      continue;
+    }
     if(q.substring(0,2) == "MJ") {
       q.match(/^MJ(\d+)(-(\d+))?$/);
       if(RegExp.$1) {
@@ -201,6 +205,9 @@ function XPathQuery(arr, nodes){
         if(arr[i][2]) str += "[ci:UCS/@ci:ucs>=" + arr[i][1]
                            + " and ci:UCS/@ci:ucs<=" + arr[i][2] + "]";
         else str += "[ci:UCS/@ci:ucs=" + arr[i][1] + "]";
+        break;
+      case "NOUCS":
+        str += "[not(ci:UCS)]";
         break;
       case "HS":
         str += "[contains(ci:HeiseiMincho/text(), \"" + arr[i][1] + "\")]";
