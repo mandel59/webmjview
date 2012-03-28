@@ -338,6 +338,7 @@ $(document).ready(function(){
         }
         var result = xml.evaluate(xpath, xml, nsResolver, XPathResult.ANY_TYPE, null);
         if(result) {
+          location.hash = encodeURI(val);
           output.empty();
           button.attr("value", _("Stop"));
           showGlyphs(result, output, {
@@ -349,6 +350,10 @@ $(document).ready(function(){
       }
     });
     input.empty().append(form);
+    if(location.hash !== "") {
+      inputbox.val(decodeURI(location.hash.substring(1)));
+      form.trigger("submit");
+    }
   }
   var xmldocs = [];
   var xmlcount = 0;
