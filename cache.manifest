@@ -1,6 +1,7 @@
 CACHE MANIFEST
-# 20120328_0
+# 20120328_1
 CACHE:
+version_0_1.txt
 data/mjcharinfo.xml
 data/mjcharinfo.1.xml
 data/mjcharinfo.2.xml
