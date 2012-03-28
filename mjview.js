@@ -351,11 +351,14 @@ $(document).ready(function(){
     input.empty().append(form);
   }
   var xmldocs = [];
-  var num_xmls = 12
-  for(var i = 0; i < num_xmls; i++) {
+  var xmlcount = 0;
+  var num_xmls = 12;
+  load_mjcharinfo = (function(i) {
+    if (! (i < num_xmls)) return;
     $.ajax("data/mjcharinfo."+(i+1)+".xml").done(function(xmldoc){
-      xmldocs.push(xmldoc);
-      if(xmldocs.length < num_xmls) return;
+      xmldocs[i] = xmldoc;
+      xmlcount++;
+      if(xmlcount < num_xmls) return;
       $.ajax("data/mjcharinfo.xml").done(function(xmlsetdoc){
         for(var i = 0; i < num_xmls; i++) {
           var node = xmlsetdoc.adoptNode(xmldocs[i].documentElement);
@@ -364,6 +367,8 @@ $(document).ready(function(){
         mjview_init(xmlsetdoc);
       });
     });
-  }
+    return load_mjcharinfo(i+1);
+  });
+  load_mjcharinfo(0);
 });
 
