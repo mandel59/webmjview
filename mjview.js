@@ -338,7 +338,7 @@ $(document).ready(function(){
         }
         var result = xml.evaluate(xpath, xml, nsResolver, XPathResult.ANY_TYPE, null);
         if(result) {
-          location.hash = encodeURI(val);
+          location.hash = "#" + encodeURI(val);
           output.empty();
           button.attr("value", _("Stop"));
           showGlyphs(result, output, {
