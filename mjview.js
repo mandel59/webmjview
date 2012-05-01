@@ -358,11 +358,15 @@ $(document).ready(function(){
   var xmldocs = [];
   var xmlcount = 0;
   var num_xmls = 12;
+  var progress = $("<div>");
+  input.append(progress);
+  progress.html(xmlcount + "/" + num_xmls);
   load_mjcharinfo = (function(i) {
     if (! (i < num_xmls)) return;
     $.ajax("data/mjcharinfo."+(i+1)+".xml").done(function(xmldoc){
       xmldocs[i] = xmldoc;
       xmlcount++;
+      progress.html(xmlcount + "/" + num_xmls);
       if(xmlcount < num_xmls) return;
       $.ajax("data/mjcharinfo.xml").done(function(xmlsetdoc){
         for(var i = 0; i < num_xmls; i++) {
