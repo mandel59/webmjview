@@ -350,10 +350,12 @@ $(document).ready(function(){
       }
     });
     input.empty().append(form);
-    if(location.hash !== "") {
+    function hashchange() {
       inputbox.val(decodeURI(location.hash.substring(1)));
       form.trigger("submit");
     }
+    if(location.hash !== "") hashchange();
+    $(window).bind("hashchange", hashchange);
   }
   var xmldocs = [];
   var xmlcount = 0;
